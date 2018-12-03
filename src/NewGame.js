@@ -1,13 +1,18 @@
-import React, { Component } from 'react'
-import { graphql, compose } from 'react-apollo'
+import React  from 'react'
+import { Query, graphql, compose } from 'react-apollo'
 import TeamCard from './teamCard'
 import { Error, Success } from './Alerts'
-import {resetCurrentGame,
+import Switcher from './Switcher'
+
+
+import {
+  resetCurrentGame,
   getCurrentGame,
   updateGame,
-  createGame } from './grahql'
+  createGame, getCurrentMarketplace
+} from './graphql'
 
-class NewGame extends Component {
+class NewGame extends React.Component {
   state = {
     created: false,
     error: false
@@ -32,21 +37,24 @@ class NewGame extends Component {
     const { currentGame, updateGame } = this.props
     const { created, error } = this.state
 
+    console.log(currentGame)
+
     return (
       <div className="pa4 flex flex-column items-center">
         {created && <Success />}
         {error && <Error />}
+
+        <Switcher />
+
+        <Query query={getCurrentMarketplace}>
+          {({data: {currentMarketplace}, client}) => (
+            <div>Current selected (out): {currentMarketplace.name}</div>
+          )}
+        </Query>
+
         <div className="flex justify-center">
           <TeamCard
             name={currentGame.teamAName}
-            onChangeName={e =>
-              updateGame({
-                variables: {
-                  index: 'teamAName',
-                  value: e.target.value
-                }
-              })
-            }
             goals={currentGame.teamAScore}
             onGoal={() =>
               updateGame({
@@ -59,14 +67,6 @@ class NewGame extends Component {
           />
           <TeamCard
             name={currentGame.teamBName}
-            onChangeName={e =>
-              updateGame({
-                variables: {
-                  index: 'teamBName',
-                  value: e.target.value
-                }
-              })
-            }
             goals={currentGame.teamBScore}
             onGoal={() =>
               updateGame({
@@ -90,8 +90,9 @@ class NewGame extends Component {
 }
 
 export default compose(
-  graphql(createGame, { name: 'createGame' }),
-  graphql(resetCurrentGame, { name: 'resetCurrentGame' }),
+  //graphql(createGame, { name: 'createGame' }),
+  //graphql(resetCurrentGame, { name: 'resetCurrentGame' }),
+
   graphql(updateGame, {name: 'updateGame'}),
   graphql(getCurrentGame, {
     props: ({ data: { currentGame, loading } }) => ({

@@ -1,7 +1,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { Link } from 'react-router-dom'
-import { allGames } from './grahql'
+import { allGames } from './graphql'
 
 const App = ({ games, loading }) => (
   <div className="pa4">

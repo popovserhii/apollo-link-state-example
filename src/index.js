@@ -13,6 +13,8 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
 
+import Switcher from './Switcher';
+
 const cache = new InMemoryCache()
 
 const defaultState = {
@@ -22,6 +24,11 @@ const defaultState = {
     teamBScore: 0,
     teamAName: 'Team A',
     teamBName: 'Team B'
+  },
+  currentMarketplace: {
+    __typename: 'Marketplace',
+    id: 1,
+    name: 'DE'
   }
 }
 
@@ -52,6 +59,29 @@ const stateLink = withClientState({
         cache.writeQuery({ query, data })
         return null;
       },
+
+      switchMarketplace: (_, { id, name }, { cache }) => {
+        const query = gql`
+          query GetCurrentMarketplace {
+            currentMarketplace @client {
+              id
+              name
+            }
+          }
+        `
+        const previous = cache.readQuery({ query })
+        const data = {
+          currentMarketplace: {
+            ...previous.currentMarketplace,
+            id,
+            name
+          }
+        }
+
+        cache.writeQuery({ query, data })
+        return null;
+      },
+
       resetCurrentGame: (_, d, { cache }) => {
         cache.writeData({ data : defaultState })
         return null;
