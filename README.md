@@ -1,5 +1,11 @@
-[![Build Status](https://travis-ci.org/SaraVieira/appolo-link-state-example.svg)](https://travis-ci.org/SaraVieira/appolo-link-state-example)
+# Apollo Link State Example
 
-Appolo Link State Example
+This fork add simple example how to implement language switcher with Apollo Link State.
 
-[Demo](https://appolo-link-state-example.now.sh)
+The component is named as `Switcher` and `__typename` has name `Marketplace` but it is only names 
+and key implementation stay the same. 
+
+You can rename this to `Lang` or something else and it will work well.
+
+- [Video](https://youtu.be/2RvRcnD8wHY)
+- [Demo](https://appolo-link-state-example.now.sh)
